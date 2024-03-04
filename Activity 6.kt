@@ -1,28 +1,28 @@
 fun main() {
     println("Enter First Character:")
-    val input1 = readLine() ?: ""
+    var character1 = readLine() ?: ""
 
     println("Enter Second Character:")
-    val input2 = readLine() ?: ""
+    var character2 = readLine() ?: ""
 
     var uniqueChars = ""
 
-    for (char1 in input1) {
+    for (c1 in character1) {
         var found = 0
-        for (char2 in input2) {
-            if (char1.equals(char2, ignoreCase = true)) {
+        for (c2 in character2) {
+            if (c1.equals(c2, ignoreCase = true)) {
                 found = 1
                 break
             }
         }
-        if (found == 0 && !uniqueChars.contains(char1, ignoreCase = true)) {
-            uniqueChars += char1
+        if (found == 0 && !uniqueChars.contains(c1, ignoreCase = true)) {
+            uniqueChars += c1
         }
     }
 
-    for (char2 in input2) {
-        if (!input1.contains(char2, ignoreCase = true) && !uniqueChars.contains(char2, ignoreCase = true)) {
-            uniqueChars += char2
+    for (c2 in character2) {
+        if (!character1.contains(c2, ignoreCase = true) && !uniqueChars.contains(c2, ignoreCase = true)) {
+            uniqueChars += c2
         }
     }
 
@@ -31,8 +31,8 @@ fun main() {
     } else {
         println("Unique Characters are")
         var index = 1
-        for (char in uniqueChars) {
-            println("[$index] $char")
+        for (c in uniqueChars) {
+            println("[$index] $c")
             index++
         }
     }
