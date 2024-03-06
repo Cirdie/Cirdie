@@ -1,0 +1,59 @@
+fun main() {
+    var uniqueChars1 = ""
+    var uniqueChars2 = ""
+
+    println("Enter First Character:")
+    val character1 = readLine() ?: ""
+
+    println("Enter Second Character:")
+    val character2 = readLine() ?: ""
+
+    for (i in character1.indices) {
+        val currentChar = character1[i]
+        var found = false
+
+        for (j in character1.indices) {
+            if (i != j && character1[j].equals(currentChar, ignoreCase = true) && currentChar != ' ') {
+                found = true
+                break
+            }
+        }
+
+        if (!found && !uniqueChars1.contains(currentChar, ignoreCase = true)) {
+            uniqueChars1 += currentChar + " "
+        }
+    }
+    uniqueChars1 = uniqueChars1.trim()
+
+    for (i in character2.indices) {
+        val currentChar = character2[i]
+        var found = false
+
+        for (j in character2.indices) {
+            if (i != j && character2[j].equals(currentChar, ignoreCase = true) && currentChar != ' ') {
+                found = true
+                break
+            }
+        }
+
+        if (!found && !uniqueChars2.contains(currentChar, ignoreCase = true)) {
+            uniqueChars2 += currentChar + " "
+        }
+    }
+    uniqueChars2 = uniqueChars2.trim()
+
+        var combinedUniqueChars = ""
+        for (char in uniqueChars1 + uniqueChars2) {
+            if (!uniqueChars1.contains(char, ignoreCase = true) || !uniqueChars2.contains(char, ignoreCase = true)) {
+                combinedUniqueChars += char
+            }
+        }
+
+        if (combinedUniqueChars.isEmpty()) {
+            println("No More Unique Characters")
+        } else {
+            println("Unique First Character is: $uniqueChars1")
+            println("Unique Second Character is: $uniqueChars2")
+            println("Combined Unique Character is: $combinedUniqueChars")
+        }
+    }
