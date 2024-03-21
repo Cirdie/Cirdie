@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 
@@ -66,7 +67,7 @@ interface IManageRecipe
 }
 
 
-// Class representing a recipe manager and Inherit the Recipe class nad ImanageRecipe Interface
+// Class representing a recipe manager
 class RecipeManager : Recipe, IManageRecipe
 {
     private List<Recipe> recipes = new List<Recipe>();
@@ -434,39 +435,45 @@ class RecipeManager : Recipe, IManageRecipe
                 Console.WriteLine("[3] Search recipes");
                 Console.WriteLine("[4] Cancel");
 
-                string option;
-                bool validInput = false;
+                Console.Write("Enter your choice: ");
+                string option = Console.ReadLine();
 
-                while (!validInput)
+                bool validOption1 = false;
+
+                while (!validOption1)
                 {
-                    Console.Write("Enter your choice: ");
+                    Console.WriteLine("\nInvalid choice. Please enter a valid option (1-4): ");
                     option = Console.ReadLine();
 
                     switch (option)
                     {
                         case "1":
-                            validInput = true;
+                            RemoveRecipe();
+                            validOption1 = true;
                             break;
                         case "2":
                             ViewRecipe();
-                            validInput = true;
+                            validOption1 = true;
                             break;
                         case "3":
                             SearchRecipe();
-                            validInput = true;
+                            validOption1 = true;
                             break;
                         case "4":
                             MainMenu();
-                            validInput = true;
+                            validOption1 = true;
                             break;
                         default:
                             Console.WriteLine("Invalid choice. Please enter a valid option (1-4).");
                             break;
                     }
                 }
+
+
             }
             else
             {
+
                 Console.WriteLine("\nRecipe found:\n");
                 recipeToRemove.DisplayDetails();
 
@@ -493,36 +500,55 @@ class RecipeManager : Recipe, IManageRecipe
         Console.ReadKey();
         MainMenu();
     }
-
-
     public void ViewRecipe()
     {
         Console.Clear();
+        Console.WriteLine("[2] View Recipe\n");
+
+        if (recipes.Count == 0)
+        {
+            Console.WriteLine("There are no recipes to view.");
+            Console.WriteLine("\nPress any key to return to the main menu...");
+            Console.ReadKey();
+            MainMenu();
+            return;
+        }
+
         Console.WriteLine("Please select an option:");
         Console.WriteLine("[1] View All Recipes");
         Console.WriteLine("[2] View Recipes by Category");
-        Console.Write("> ");
-        int choice;
-        if (int.TryParse(Console.ReadLine(), out choice))
+        Console.WriteLine("[3] Cancel");
+
+        bool validOption = false;
+
+        while (!validOption)
         {
+           
+
+            Console.Write("> ");
+            string choice = Console.ReadLine();
+
             switch (choice)
             {
-                case 1:
+                case "1":
                     ViewAllRecipes();
+                    validOption = true;
                     break;
-                case 2:
+                case "2":
                     ViewRecipesByCategory();
+                    validOption = true;
+                    break;
+                case "3":
+                    MainMenu();
+                    validOption = true;
                     break;
                 default:
-                    Console.WriteLine("Invalid choice. Please enter either 1 or 2.");
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
                     break;
             }
         }
-        else
-        {
-            Console.WriteLine("Invalid choice. Please enter either 1 or 2.");
-        }
     }
+
 
     private void ViewAllRecipes()
     {
@@ -646,39 +672,68 @@ class RecipeManager : Recipe, IManageRecipe
         Console.Clear();
         Console.WriteLine($"--- {recipe.Name} ---\n");
         recipe.DisplayDetails();
+
+        Console.WriteLine("\nPress any key to return to the main menu...");
+        Console.ReadKey();
+        MainMenu();
     }
+
 
 
     public void SearchRecipe()
-    {
+{
         Console.Clear();
         Console.WriteLine("[5] Search Recipe\n");
-        Console.WriteLine("Please select an option:");
-        Console.WriteLine("[1] Search by Recipe Name");
-        Console.WriteLine("[2] Search by Ingredients");
-        Console.Write("> ");
 
-        string choice = Console.ReadLine();
-
-        switch (choice)
+        if (recipes.Count == 0)
         {
-            case "1":
-                Console.Write("Please enter the name of the recipe you want to search for: ");
-                string recipeName = Console.ReadLine();
-                SearchRecipesByName(recipeName);
-                break;
-            case "2":
-                Console.Write("Please enter the ingredient you want to search for: ");
-                string ingredient = Console.ReadLine();
-                SearchRecipesByIngredient(ingredient);
-                break;
-            default:
-                Console.WriteLine("Invalid choice. Please try again.");
-                Console.ReadKey();
-                MainMenu();
-                break;
+            Console.WriteLine("There are no recipes to search.");
+            Console.WriteLine("\nPress any key to return to the main menu...");
+            Console.ReadKey();
+            MainMenu();
+            return;
         }
+
+        bool validOption = false;
+
+        while (!validOption)
+        {
+            Console.WriteLine("Please select an option:");
+            Console.WriteLine("[1] Search by Recipe Name");
+            Console.WriteLine("[2] Search by Ingredients");
+            Console.WriteLine("[3] Cancel");
+            Console.Write("> ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Please enter the name of the recipe you want to search for: ");
+                    string recipeName = Console.ReadLine();
+                    SearchRecipesByName(recipeName);
+                    validOption = true;
+                    break;
+
+                case "2":
+                    Console.Write("Please enter the ingredient you want to search for: ");
+                    string ingredient = Console.ReadLine();
+                    SearchRecipesByIngredient(ingredient);
+                    validOption = true;
+                    break;
+
+                case "3":
+                    MainMenu();
+                    validOption = true;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please enter a number between 1 to 3.");
+                    break;
+            }
+        
     }
+}
 
     private void SearchRecipesByName(string recipeName)
     {
