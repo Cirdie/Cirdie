@@ -3,6 +3,38 @@ using System;
 using System.Collections.Generic;
 
 // Abstract class representing a food item
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        DisplayWelcomeInterface();
+
+        Console.WriteLine("Press any key to start...");
+        Console.ReadKey(true); // Wait for a key press
+
+        RecipeManager recipeManager = new RecipeManager("", new List<string>(), "", 0, "");
+        recipeManager.MainMenu();
+    }
+
+    static void DisplayWelcomeInterface()
+    {
+        Console.WriteLine(@"
+ ######   ########   #######  ##     ## ########        ###    
+##    ##  ##     ## ##     ## ##     ## ##     ##      ## ##   
+##        ##     ## ##     ## ##     ## ##     ##     ##   ##  
+##   #### ########  ##     ## ##     ## ########     ##     ## 
+##    ##  ##   ##   ##     ## ##     ## ##           ######### 
+##    ##  ##    ##  ##     ## ##     ## ##           ##     ## 
+ ######   ##     ##  #######   #######  ##           ##     ## 
+");
+        Console.WriteLine("    \n    Welcome to Cookbook Companion: Your Recipe Manager\n");
+        Console.WriteLine("    ----------------------------------------------------");
+        Console.WriteLine("               Manage your recipes with ease!            ");
+        Console.WriteLine("    ----------------------------------------------------\n");
+    }
+}
+
 abstract class FoodItem
 {
     public string Name { get; set; }
@@ -37,22 +69,24 @@ class Recipe : FoodItem
     // Override method to display recipe details
     public override void DisplayDetails()
     {
-        Console.WriteLine("============================================");
-        Console.WriteLine($"            {Name.ToUpper()}               ");
-        Console.WriteLine("============================================\n");
-        Console.WriteLine($"Category: {Category}");
-        Console.WriteLine($"Cooking Time: {CookingTime} minutes");
-        Console.WriteLine("--------------------------------------------");
-        Console.WriteLine("Ingredients:");
+        Console.WriteLine("╔════════════════════════════════════════════════╗");
+        Console.WriteLine($"║                 {Name.ToUpper()}                 ║");
+        Console.WriteLine("╠════════════════════════════════════════════════╣");
+        Console.WriteLine($"║  Category: {Category,-34}║");
+        Console.WriteLine($"║  Cooking Time: {CookingTime,-30}║");
+        Console.WriteLine("╠────────────────────────────────────────────────╣");
+        Console.WriteLine("║                 Ingredients                    ║");
+        Console.WriteLine("╠────────────────────────────────────────────────╣");
         foreach (string ingr in Ingredients)
         {
-            Console.WriteLine($"- {ingr}");
+            Console.WriteLine($"║  - {ingr,-41}║");
         }
-        Console.WriteLine("--------------------------------------------");
-        Console.WriteLine("Instructions:");
-        Console.WriteLine(Instructions);
-        Console.WriteLine("\n============================================");
+        Console.WriteLine("╠────────────────────────────────────────────────╣");
+        Console.WriteLine("║                Instructions                    ║");
+        Console.WriteLine($"║  {Instructions,-48}║");
+        Console.WriteLine("╚════════════════════════════════════════════════╝");
     }
+
 }
 
 // Interface for managing recipes
@@ -82,22 +116,33 @@ class RecipeManager : Recipe, IManageRecipe
         Console.Clear();
         Console.WriteLine("[1] Add Recipe\n");
 
-        Console.WriteLine("Please enter the name of the recipe:");
+        Console.WriteLine("");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("            Please Enter the Name of the Recipe      ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.Write("\n> ");
         string name = Console.ReadLine();
 
         // Check if the recipe with the same name already exists
         Recipe existingRecipe = recipes.Find(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (existingRecipe != null)
         {
-            Console.WriteLine("\nRecipe with the same name already exists:");
+            Console.WriteLine("");
+            Console.WriteLine("────────────────────────────────────────────────────");
+            Console.WriteLine("             Recipe with the Same Name              ");
+            Console.WriteLine("                  Already Exists                    ");
+            Console.WriteLine("────────────────────────────────────────────────────");
             existingRecipe.DisplayDetails();
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();
             MainMenu();
             return; // Exit the method
         }
-
-        Console.WriteLine("\nPlease enter the list of ingredients for the recipe (one ingredient per line, press Enter twice when finished):");
+        Console.WriteLine("");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("           Please Enter the Ingredients             ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("\n(one ingredient per line, press Enter twice when finished)\n");
         List<string> ingredients = new List<string>();
         string ingredient;
         while (!string.IsNullOrWhiteSpace(ingredient = Console.ReadLine()))
@@ -123,8 +168,11 @@ class RecipeManager : Recipe, IManageRecipe
         {
             Console.WriteLine($"- {item}");
         }
-
-        Console.WriteLine("\nPlease enter the cooking instructions for the recipe (press Enter twice to confirm):");
+        Console.WriteLine("");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("    Please Enter the Cooking Instructions         ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("\n(press Enter twice to confirm)\n");
         string instructions = "";
         string line;
         while (!string.IsNullOrWhiteSpace(line = Console.ReadLine()))
@@ -145,13 +193,13 @@ class RecipeManager : Recipe, IManageRecipe
         Console.Clear();
         Console.WriteLine("[1] Add Recipe\n");
 
-        Console.WriteLine("\nRecipe Ingredients:");
+        Console.WriteLine("\nRecipe Ingredients\n");
         foreach (var item in ingredients)
         {
             Console.WriteLine($"- {item}");
         }
 
-        Console.WriteLine("\nRecipe Instructions:");
+        Console.WriteLine("\nRecipe Instructions\n");
         Console.WriteLine(instructions);
 
         Console.WriteLine("\nPlease enter the cooking time for the recipe (in minutes):");
@@ -161,20 +209,24 @@ class RecipeManager : Recipe, IManageRecipe
             Console.WriteLine("Invalid input. Please enter a valid cooking time in minutes:");
         }
 
-        Console.WriteLine("\nPlease select a category for the recipe:");
-        Console.WriteLine("[1] Appetizers & Snacks");
-        Console.WriteLine("[2] Main Dishes");
-        Console.WriteLine("[3] Side Dishes");
-        Console.WriteLine("[4] Desserts");
-        Console.WriteLine("[5] Breakfast & Brunch");
-        Console.WriteLine("[6] Beverages");
-        Console.WriteLine("[7] Soups & Salads");
+        Console.Clear();
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("              Please Select a Category              ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("[1] » Appetizers & Snacks");
+        Console.WriteLine("[2] » Main Dishes");
+        Console.WriteLine("[3] » Side Dishes");
+        Console.WriteLine("[4] » Desserts");
+        Console.WriteLine("[5] » Breakfast & Brunch");
+        Console.WriteLine("[6] » Beverages");
+        Console.WriteLine("[7] » Soups & Salads");
+        Console.WriteLine("────────────────────────────────────────────────────");
 
         string categoryInput;
         string category;
         do
         {
-            Console.Write("Enter your choice: ");
+            Console.Write("\n> ");
             categoryInput = Console.ReadLine();
 
             switch (categoryInput)
@@ -258,14 +310,16 @@ class RecipeManager : Recipe, IManageRecipe
 
     if (recipeToUpdate == null)
     {
-        Console.WriteLine("\nRecipe not found.");
-        Console.WriteLine("Would you like to:");
-        Console.WriteLine("[1] Try again");
-        Console.WriteLine("[2] List recipes");
-        Console.WriteLine("[3] Search recipes");
-        Console.WriteLine("[4] Cancel");
-
-        Console.Write("Enter your choice: ");
+            Console.Clear();
+            Console.WriteLine("────────────────────────────────────────────────────");
+            Console.WriteLine("                  Recipe Not Found                   ");
+            Console.WriteLine("────────────────────────────────────────────────────");
+            Console.WriteLine("[1] » Try again");
+            Console.WriteLine("[2] » List recipes");
+            Console.WriteLine("[3] » Search recipes");
+            Console.WriteLine("[4] » Cancel");
+            Console.WriteLine("────────────────────────────────────────────────────");
+            Console.Write("\n> ");
         string option = Console.ReadLine();
 
             bool validOption = false;
@@ -310,15 +364,19 @@ class RecipeManager : Recipe, IManageRecipe
         {
             recipeToUpdate.DisplayDetails();
 
-            Console.WriteLine("\n[1] Recipe Name");
-            Console.WriteLine("[2] Ingredients");
-            Console.WriteLine("[3] Cooking Instructions");
-            Console.WriteLine("[4] Cooking Time");
-            Console.WriteLine("[5] Confirm");
-            Console.WriteLine("[6] Cancel\n");
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.WriteLine("            What would you like to update           ");
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.WriteLine("[1] » Recipe Name");
+                Console.WriteLine("[2] » Ingredients");
+                Console.WriteLine("[3] » Cooking Instructions");
+                Console.WriteLine("[4] » Cooking Time");
+                Console.WriteLine("[5] » Confirm");
+                Console.WriteLine("[6] » Cancel\n");
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.Write("\n> ");
 
-            Console.Write("Please enter the option number corresponding to the information you want to update: ");
-            string option = Console.ReadLine();
+                string option = Console.ReadLine();
 
             switch (option)
             {
@@ -428,12 +486,16 @@ class RecipeManager : Recipe, IManageRecipe
 
             if (recipeToRemove == null)
             {
-                Console.WriteLine("\nRecipe not found.");
-                Console.WriteLine("Would you like to:");
-                Console.WriteLine("[1] Try again");
-                Console.WriteLine("[2] List recipes");
-                Console.WriteLine("[3] Search recipes");
-                Console.WriteLine("[4] Cancel");
+                Console.Clear();
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.WriteLine("                  Recipe Not Found                   ");
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.WriteLine("[1] » Try again");
+                Console.WriteLine("[2] » List recipes");
+                Console.WriteLine("[3] » Search recipes");
+                Console.WriteLine("[4] » Cancel");
+                Console.WriteLine("────────────────────────────────────────────────────");
+                Console.Write("\n> ");
 
                 Console.Write("Enter your choice: ");
                 string option = Console.ReadLine();
@@ -514,10 +576,16 @@ class RecipeManager : Recipe, IManageRecipe
             return;
         }
 
-        Console.WriteLine("Please select an option:");
-        Console.WriteLine("[1] View All Recipes");
-        Console.WriteLine("[2] View Recipes by Category");
-        Console.WriteLine("[3] Cancel");
+        Console.Clear();
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("              Please Select an Option               ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("[1] » View All Recipes");
+        Console.WriteLine("[2] » View Recipes by Category");
+        Console.WriteLine("[3] » Cancel");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.Write("\n> ");
+
 
         bool validOption = false;
 
@@ -576,14 +644,17 @@ class RecipeManager : Recipe, IManageRecipe
     private void ViewRecipesByCategory()
     {
         Console.Clear();
-        Console.WriteLine("Please select a category:");
-        Console.WriteLine("[1] Appetizers & Snacks");
-        Console.WriteLine("[2] Main Dishes");
-        Console.WriteLine("[3] Side Dishes");
-        Console.WriteLine("[4] Desserts");
-        Console.WriteLine("[5] Breakfast & Brunch");
-        Console.WriteLine("[6] Beverages");
-        Console.WriteLine("[7] Soups & Salads");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("              Please Select a Category              ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("[1] » Appetizers & Snacks");
+        Console.WriteLine("[2] » Main Dishes");
+        Console.WriteLine("[3] » Side Dishes");
+        Console.WriteLine("[4] » Desserts");
+        Console.WriteLine("[5] » Breakfast & Brunch");
+        Console.WriteLine("[6] » Beverages");
+        Console.WriteLine("[7] » Soups & Salads");
+        Console.WriteLine("────────────────────────────────────────────────────");
         Console.Write("> ");
 
         int choice;
@@ -698,11 +769,15 @@ class RecipeManager : Recipe, IManageRecipe
 
         while (!validOption)
         {
+            Console.Clear();
+            Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
             Console.WriteLine("Please select an option:");
-            Console.WriteLine("[1] Search by Recipe Name");
-            Console.WriteLine("[2] Search by Ingredients");
-            Console.WriteLine("[3] Cancel");
+            Console.WriteLine("[1] » Search by Recipe Name");
+            Console.WriteLine("[2] » Search by Ingredients");
+            Console.WriteLine("[3] ➜ Cancel");
+            Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
             Console.Write("> ");
+
 
             string choice = Console.ReadLine();
 
@@ -782,18 +857,18 @@ class RecipeManager : Recipe, IManageRecipe
     public void MainMenu()
     {
         Console.Clear();
-        Console.WriteLine("===================================================");
-        Console.WriteLine("\t\tRECIPE MANAGEMENT SYSTEM");
-        Console.WriteLine("===================================================\n");
-        Console.WriteLine("[1] Add Recipe");
-        Console.WriteLine("[2] Update Recipe");
-        Console.WriteLine("[3] Remove Recipe");
-        Console.WriteLine("[4] View Recipe");
-        Console.WriteLine("[5] Search Recipe");
-        Console.WriteLine("[6] Exit");
-        Console.WriteLine("\n===================================================\n");
+        Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
+        Console.WriteLine("                          Welcome to Cookbook Companion: Your Recipe Manager           ");
+        Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
+        Console.WriteLine("  [1] » Create a New Recipe                                                           ");
+        Console.WriteLine("  [2] » Update an Existing Recipe                                                     ");
+        Console.WriteLine("  [3] » Remove a Recipe                                                               ");
+        Console.WriteLine("  [4] » View Recipes                                                                  ");
+        Console.WriteLine("  [5] » Search Recipes                                                                ");
+        Console.WriteLine("  [6] » Exit                                                                          ");
+        Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
+        Console.Write("\nEnter the number corresponding to your choice: ");
 
-        Console.Write("Please enter your choice: ");
         int choice;
         if (int.TryParse(Console.ReadLine(), out choice))
         {
@@ -828,9 +903,4 @@ class RecipeManager : Recipe, IManageRecipe
         }
     }
 
-    static void Main(string[] args)
-    {
-        RecipeManager recipeManager = new RecipeManager("", new List<string>(), "", 0, "");
-        recipeManager.MainMenu();
-    }
 }
