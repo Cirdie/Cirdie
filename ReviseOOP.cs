@@ -37,13 +37,14 @@ class Program
 
 abstract class FoodItem
 {
-    public string Name { get; set; }
-    public List<string> Ingredients { get; set; }
-    public string Instructions { get; set; }
-    public int CookingTime { get; set; }
-    public string Category { get; set; }
+    // Properties to store information about the food item
+    public string Name { get; set; }                // Name of the food item
+    public List<string> Ingredients { get; set; }   // List of ingredients required
+    public string Instructions { get; set; }        // Cooking instructions or recipe steps
+    public int CookingTime { get; set; }            // Time required to cook or prepare the food item
+    public string Category { get; set; }            // Category to which the food item belongs (e.g., Appetizers, Main Dishes, etc.)
 
-    // Constructor
+    // Constructor to initialize the properties of the food item
     public FoodItem(string name, List<string> ingredients, string instructions, int cookingTime, string category)
     {
         Name = name;
@@ -53,14 +54,15 @@ abstract class FoodItem
         Category = category;
     }
 
-    // Abstract method for displaying details
+    // Abstract method for displaying details of the food item
     public abstract void DisplayDetails();
 }
+
 
 // Derived class representing a recipe, inheriting from FoodItem
 class Recipe : FoodItem
 {
-    // Constructor
+    // Constructor calling the base class constructor
     public Recipe(string name, List<string> ingredients, string instructions, int cookingTime, string category)
         : base(name, ingredients, instructions, cookingTime, category)
     {
@@ -69,53 +71,54 @@ class Recipe : FoodItem
     // Override method to display recipe details
     public override void DisplayDetails()
     {
-        Console.WriteLine("╔════════════════════════════════════════════════╗");
-        Console.WriteLine($"║                 {Name.ToUpper()}                 ║");
-        Console.WriteLine("╠════════════════════════════════════════════════╣");
-        Console.WriteLine($"║  Category: {Category,-34}║");
-        Console.WriteLine($"║  Cooking Time: {CookingTime,-30}║");
-        Console.WriteLine("╠────────────────────────────────────────────────╣");
-        Console.WriteLine("║                 Ingredients                    ║");
-        Console.WriteLine("╠────────────────────────────────────────────────╣");
+        Console.WriteLine("");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine($"                     {Name.ToUpper()}                 ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine($"Category          |  {Category}");
+        Console.WriteLine($"Cooking Time      |  {CookingTime} minutes");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("Ingredients:");
         foreach (string ingr in Ingredients)
         {
-            Console.WriteLine($"║  - {ingr,-41}║");
+            Console.WriteLine($"- {ingr}");
         }
-        Console.WriteLine("╠────────────────────────────────────────────────╣");
-        Console.WriteLine("║                Instructions                    ║");
-        Console.WriteLine($"║  {Instructions,-48}║");
-        Console.WriteLine("╚════════════════════════════════════════════════╝");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("Instructions:");
+        Console.WriteLine(Instructions);
+        Console.WriteLine("────────────────────────────────────────────────────");
     }
 
+
+
+
 }
 
+
+
 // Interface for managing recipes
-interface IManageRecipe
-{
-    void AddRecipe();
-    void UpdateRecipe();
-    void RemoveRecipe();
-    void ViewRecipe();
-    void SearchRecipe();
-    void MainMenu();
-}
 
 
 // Class representing a recipe manager
-class RecipeManager : Recipe, IManageRecipe
+class RecipeManager : Recipe
 {
     private List<Recipe> recipes = new List<Recipe>();
 
+    // Constructor of RecipeManager class
     public RecipeManager(string name, List<string> ingredients, string instructions, int cookingTime, string category)
+        // Calling the constructor of the base class (Recipe) using the 'base' keyword
         : base(name, ingredients, instructions, cookingTime, category)
     {
+        // Constructor body
     }
 
+    // Method to add a new recipe to the recipe manager
     public void AddRecipe()
     {
         Console.Clear();
         Console.WriteLine("[1] Add Recipe\n");
 
+        // Prompt for recipe name
         Console.WriteLine("");
         Console.WriteLine("────────────────────────────────────────────────────");
         Console.WriteLine("            Please Enter the Name of the Recipe      ");
@@ -127,17 +130,19 @@ class RecipeManager : Recipe, IManageRecipe
         Recipe existingRecipe = recipes.Find(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (existingRecipe != null)
         {
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("────────────────────────────────────────────────────");
+
             Console.WriteLine("             Recipe with the Same Name              ");
             Console.WriteLine("                  Already Exists                    ");
-            Console.WriteLine("────────────────────────────────────────────────────");
             existingRecipe.DisplayDetails();
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();
             MainMenu();
             return; // Exit the method
         }
+
+        // Prompt for ingredients
         Console.WriteLine("");
         Console.WriteLine("────────────────────────────────────────────────────");
         Console.WriteLine("           Please Enter the Ingredients             ");
@@ -160,19 +165,20 @@ class RecipeManager : Recipe, IManageRecipe
             return; // Exit the method
         }
 
+        // Prompt for cooking instructions
         Console.Clear();
-        Console.WriteLine("[1] Add Recipe\n");
-
-        Console.WriteLine("\nRecipe Ingredients:");
+        Console.WriteLine("                 RECIPE INGREDIENTS                 ");
+        Console.WriteLine("────────────────────────────────────────────────────\n");
         foreach (var item in ingredients)
         {
             Console.WriteLine($"- {item}");
         }
+
         Console.WriteLine("");
         Console.WriteLine("────────────────────────────────────────────────────");
-        Console.WriteLine("    Please Enter the Cooking Instructions         ");
+        Console.WriteLine("           Please Enter the Instructions            ");
         Console.WriteLine("────────────────────────────────────────────────────");
-        Console.WriteLine("\n(press Enter twice to confirm)\n");
+        Console.WriteLine("\n(one ingredient per line, press Enter twice when finished)\n");
         string instructions = "";
         string line;
         while (!string.IsNullOrWhiteSpace(line = Console.ReadLine()))
@@ -190,16 +196,17 @@ class RecipeManager : Recipe, IManageRecipe
             return; // Exit the method
         }
 
+        // Prompt for cooking time
         Console.Clear();
-        Console.WriteLine("[1] Add Recipe\n");
 
-        Console.WriteLine("\nRecipe Ingredients\n");
+        Console.WriteLine("                 RECIPE INGREDIENTS                 ");
+        Console.WriteLine("────────────────────────────────────────────────────\n");
         foreach (var item in ingredients)
         {
             Console.WriteLine($"- {item}");
         }
-
-        Console.WriteLine("\nRecipe Instructions\n");
+        Console.WriteLine("                 RECIPE INSTRUCTIONS                ");
+        Console.WriteLine("────────────────────────────────────────────────────\n");
         Console.WriteLine(instructions);
 
         Console.WriteLine("\nPlease enter the cooking time for the recipe (in minutes):");
@@ -209,6 +216,7 @@ class RecipeManager : Recipe, IManageRecipe
             Console.WriteLine("Invalid input. Please enter a valid cooking time in minutes:");
         }
 
+        // Prompt for category selection
         Console.Clear();
         Console.WriteLine("────────────────────────────────────────────────────");
         Console.WriteLine("              Please Select a Category              ");
@@ -261,21 +269,18 @@ class RecipeManager : Recipe, IManageRecipe
                  !categoryInput.Equals("4") && !categoryInput.Equals("5") && !categoryInput.Equals("6") &&
                  !categoryInput.Equals("7"));
 
-        Console.Clear();
-        Console.WriteLine("[1] Add Recipe\n");
-
-        // Creating a new Recipe object
+        // Create a new Recipe object
         Recipe newRecipe = new Recipe(name, ingredients, instructions, cookingTime, category);
 
-        // Displaying recipe details using polymorphism
+        Console.Clear();
         newRecipe.DisplayDetails();
 
-        // Confirming and adding the recipe...
+        // Confirm adding the recipe
         Console.Write("\nWould you like to add this recipe? (Y/N): ");
         string confirmInput = Console.ReadLine();
         if (confirmInput.Equals("Y", StringComparison.OrdinalIgnoreCase))
         {
-            // Adding the new recipe to the list
+            // Add the new recipe to the list
             recipes.Add(newRecipe);
             Console.WriteLine("\nRecipe added successfully!");
         }
@@ -284,10 +289,12 @@ class RecipeManager : Recipe, IManageRecipe
             Console.WriteLine("\nRecipe not added.");
         }
 
+        // Return to the main menu
         Console.WriteLine("\nPress any key to return to the main menu...");
         Console.ReadKey();
-        MainMenu(); // Return to the main menu
+        MainMenu();
     }
+
 
     public void UpdateRecipe()
 {
@@ -356,8 +363,9 @@ class RecipeManager : Recipe, IManageRecipe
 
         }
         else
-    {
-        Console.WriteLine("Recipe found. What would you like to update?\n");
+        {
+            Console.Clear();
+            Console.WriteLine("Recipe found. What would you like to update?\n");
 
         bool updated = false;
         while (!updated)
@@ -535,7 +543,7 @@ class RecipeManager : Recipe, IManageRecipe
             }
             else
             {
-
+                Console.Clear();
                 Console.WriteLine("\nRecipe found:\n");
                 recipeToRemove.DisplayDetails();
 
@@ -749,109 +757,99 @@ class RecipeManager : Recipe, IManageRecipe
         MainMenu();
     }
 
-
-
     public void SearchRecipe()
-{
+    {
         Console.Clear();
-        Console.WriteLine("[5] Search Recipe\n");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("            Please Select an Option                ");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.WriteLine("[1] » Search by Recipe Name");
+        Console.WriteLine("[2] » Search by Ingredients");
+        Console.WriteLine("[3] » Cancel");
+        Console.WriteLine("────────────────────────────────────────────────────");
+        Console.Write("\n> ");
 
-        if (recipes.Count == 0)
+        string option = Console.ReadLine();
+
+        switch (option)
         {
-            Console.WriteLine("There are no recipes to search.");
-            Console.WriteLine("\nPress any key to return to the main menu...");
-            Console.ReadKey();
-            MainMenu();
-            return;
-        }
-
-        bool validOption = false;
-
-        while (!validOption)
-        {
-            Console.Clear();
-            Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
-            Console.WriteLine("Please select an option:");
-            Console.WriteLine("[1] » Search by Recipe Name");
-            Console.WriteLine("[2] » Search by Ingredients");
-            Console.WriteLine("[3] ➜ Cancel");
-            Console.WriteLine("──────────────────────────────────────────────────────────────────────────────────────");
-            Console.Write("> ");
-
-
-            string choice = Console.ReadLine();
-
-            switch (choice)
-            {
-                case "1":
-                    Console.Write("Please enter the name of the recipe you want to search for: ");
-                    string recipeName = Console.ReadLine();
-                    SearchRecipesByName(recipeName);
-                    validOption = true;
-                    break;
-
-                case "2":
-                    Console.Write("Please enter the ingredient you want to search for: ");
-                    string ingredient = Console.ReadLine();
-                    SearchRecipesByIngredient(ingredient);
-                    validOption = true;
-                    break;
-
-                case "3":
-                    MainMenu();
-                    validOption = true;
-                    break;
-
-                default:
-                    Console.WriteLine("Invalid choice. Please enter a number between 1 to 3.");
-                    break;
-            }
-        
-    }
-}
-
-    private void SearchRecipesByName(string recipeName)
-    {
-        var results = recipes.Where(r => r.Name.ToLower().Contains(recipeName.ToLower())).ToList();
-        DisplaySearchResults(results);
-    }
-
-    private void SearchRecipesByIngredient(string ingredient)
-    {
-        var results = recipes.Where(r => r.Ingredients.Any(i => i.ToLower().Contains(ingredient.ToLower()))).ToList();
-        DisplaySearchResults(results);
-    }
-
-    private void DisplaySearchResults(List<Recipe> results)
-    {
-        if (results.Count == 0)
-        {
-            Console.WriteLine("No recipes found.");
-            Console.ReadKey();
-            MainMenu();
-            return;
-        }
-
-        Console.WriteLine("\n[Search Results]\n");
-
-        for (int i = 0; i < results.Count; i++)
-        {
-            Console.WriteLine($"[{i + 1}] {results[i].Name}");
-        }
-
-        Console.Write("\nPlease enter the number of the recipe you want to view: ");
-        int selection;
-        if (int.TryParse(Console.ReadLine(), out selection) && selection > 0 && selection <= results.Count)
-        {
-            results[selection - 1].DisplayDetails();
-        }
-        else
-        {
-            Console.WriteLine("Invalid selection. Please try again.");
-            Console.ReadKey();
-            SearchRecipe();
+            case "1":
+                Console.WriteLine("\nPlease enter the recipe name:");
+                string recipeName = Console.ReadLine();
+                List<Recipe> matchingRecipesByName = recipes.FindAll(r => r.Name.Equals(recipeName, StringComparison.OrdinalIgnoreCase));
+                if (matchingRecipesByName.Count > 0)
+                {
+                    Console.WriteLine("\nMatching Recipes:\n");
+                    for (int i = 0; i < matchingRecipesByName.Count; i++)
+                    {
+                        Console.WriteLine($"[{i + 1}] {matchingRecipesByName[i].Name}");
+                    }
+                    Console.WriteLine("\nSelect a recipe number to view details:");
+                    int selectedRecipeIndex;
+                    if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex > 0 && selectedRecipeIndex <= matchingRecipesByName.Count)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Displaying Recipe Details:\n");
+                        matchingRecipesByName[selectedRecipeIndex - 1].DisplayDetails();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid selection. Returning to main menu...");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nNo recipes found with that name.");
+                }
+                Console.WriteLine("\nPress any key to return to the main menu...");
+                Console.ReadKey();
+                MainMenu();
+                break;
+            case "2":
+                Console.WriteLine("\nPlease enter ingredients to search for (separated by commas):");
+                string inputIngredients = Console.ReadLine();
+                string[] ingredientList = inputIngredients.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                          .Select(i => i.Trim())
+                                                          .ToArray();
+                List<Recipe> matchingRecipesByIngredients = recipes.FindAll(r => r.Ingredients.Any(i => ingredientList.Contains(i, StringComparer.OrdinalIgnoreCase)));
+                if (matchingRecipesByIngredients.Count > 0)
+                {
+                    Console.WriteLine("\nMatching Recipes:\n");
+                    for (int i = 0; i < matchingRecipesByIngredients.Count; i++)
+                    {
+                        Console.WriteLine($"[{i + 1}] {matchingRecipesByIngredients[i].Name}");
+                    }
+                    Console.WriteLine("\nSelect a recipe number to view details:");
+                    int selectedRecipeIndex;
+                    if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex > 0 && selectedRecipeIndex <= matchingRecipesByIngredients.Count)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Displaying Recipe Details:\n");
+                        matchingRecipesByIngredients[selectedRecipeIndex - 1].DisplayDetails();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid selection. Returning to main menu...");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nNo recipes found with those ingredients.");
+                }
+                Console.WriteLine("\nPress any key to return to the main menu...");
+                Console.ReadKey();
+                MainMenu();
+                break;
+            case "3":
+                MainMenu();
+                break;
+            default:
+                Console.WriteLine("Invalid option.");
+                SearchRecipe();
+                break;
         }
     }
+
 
 
     public void MainMenu()
